@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0-jammy AS test
+FROM mcr.microsoft.com/dotnet/sdk:6.0-bookworm  AS test
 
 WORKDIR /app
 
