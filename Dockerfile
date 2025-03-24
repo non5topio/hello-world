@@ -1,6 +1,6 @@
 # Stage 1: Build the application
 FROM mcr.microsoft.com/dotnet/sdk:6.0-jammy AS test
-WORKDIR /src
+WORKDIR /app
 # Copy project files and restore dependencies
 COPY *.csproj ./
 RUN dotnet restore
