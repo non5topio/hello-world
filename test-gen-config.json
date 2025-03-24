@@ -12,8 +12,8 @@
       ],
       "source-test-file-paths": [
         {
-          "source-file-path": "HelloWorld.cs",
-          "test-file-path": "UnitTest1.cs"
+          "source-file-path": "src/HelloWorld.cs",
+          "test-file-path": "test/UnitTest1.cs"
         }
       ],
       "test-command": "dotnet test",
