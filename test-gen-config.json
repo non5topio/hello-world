@@ -16,7 +16,7 @@
           "test-file-path": "test/UnitTest1.cs"
         }
       ],
-      "test-command": "dotnet test",
+      "test-command": "dotnet test --collect:\\\"XPlat Code Coverage\\\"",
       "coverage-type": "cobertura",
       "code-coverage-report-path": "test/TestResults/579a4942-dd6a-43d8-aaa8-5eaaab22e908/coverage.cobertura.xml",
       "desired-coverage": 90,
