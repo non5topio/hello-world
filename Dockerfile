@@ -8,7 +8,7 @@ RUN dotnet restore
 RUN dotnet test --no-restore
 
 # Build and publish a framework-dependent release (do not include --self-contained true)
-RUN dotnet publish -c Release -o out --no-restore
+RUN dotnet publish -c Release -o out --no-restore -r linux-x64
 
 # Stage 2: Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-jammy AS runtime
