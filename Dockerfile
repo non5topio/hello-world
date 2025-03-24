@@ -5,10 +5,10 @@ WORKDIR /app
 # Copy everything
 COPY . ./
 
-# Restore dependencies
-RUN dotnet restore
+# Restore dependencies with runtime identifier
+RUN dotnet restore -r linux-x64
 
-# Run unit tests (if the tests fail, the build process stops)
+# Run unit tests
 RUN dotnet test --no-restore
 
 # Build and publish a release
