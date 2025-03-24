@@ -1,19 +1,17 @@
-# Stage 1: Build the application
-FROM mcr.microsoft.com/dotnet/sdk:6.0-jammy AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /app
-# Copy project files and restore dependencies
-COPY *.csproj ./
+
+# Copy everything
+COPY . ./
+# Restore as distinct layers
 RUN dotnet restore
-
-# Copy the rest of the source code and publish with a RuntimeIdentifier
-COPY . .
+# Run unit tests (if the tests fail the build process is stopped)
 RUN dotnet test
-RUN dotnet publish -c Release -r linux-x64 -o /app/publish --self-contained false
+# Build and publish a release
+RUN dotnet publish -r linux-x64 --self-contained true -c Release -o out
 
-# Stage 2: Create the runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-jammy AS test
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS test
 WORKDIR /app
-COPY --from=build /app/publish .
-EXPOSE 80
+COPY --from=build-env /app/out .
 ENTRYPOINT ["./hello-world"]
-
