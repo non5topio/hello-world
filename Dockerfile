@@ -7,6 +7,7 @@ RUN dotnet restore
 
 # Copy the rest of the source code and publish with a RuntimeIdentifier
 COPY . .
+RUN dotnet test
 RUN dotnet publish -c Release -r linux-x64 -o /app/publish --self-contained false
 
 # Stage 2: Create the runtime image
