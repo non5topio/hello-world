@@ -11,7 +11,7 @@ RUN dotnet test
 RUN dotnet publish -r linux-x64 --self-contained true -c Release -o out
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-jammy AS runtime
 WORKDIR /app
 COPY --from=test /app/out .
 ENTRYPOINT ["./hello-world"]
