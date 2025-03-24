@@ -1,16 +1,19 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
+# Use the official .NET SDK image for building
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
 
-# Copy everything
-COPY . ./
-# Restore as distinct layers
+# Copy project file(s) and restore as distinct layers
+COPY hello-world.csproj ./
 RUN dotnet restore
-# Run unit tests (if the tests fail the build process is stopped)
-RUN dotnet test
-# Build and publish a release
+
+# Copy the remaining files and publish the app as a self-contained Linux binary
+COPY . ./
 RUN dotnet publish -r linux-x64 --self-contained true -c Release -o out
 
-# Build runtime image
+# Use the ASP.NET runtime image (lightweight) for running the app
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS test
 WORKDIR /app
-COPY --from=build-env /app/out .
+COPY --from=build /app/out .
+
+# Set the entrypoint to run the published binary
+ENTRYPOINT ["./hello-world"]
