@@ -1,25 +1,24 @@
-# Stage 1: Build and Test
+# Stage 1: Build
 FROM mcr.microsoft.com/dotnet/sdk:6.0-jammy AS test
 WORKDIR /app
 
-# Copy everything
+# Copy everything and restore dependencies
 COPY . ./
-
-# Restore dependencies with runtime identifier
-RUN dotnet restore -r linux-x64
-
-# Run unit tests
+RUN dotnet restore
 RUN dotnet test --no-restore
 
-# Build and publish a release
-RUN dotnet publish -r linux-x64 --self-contained true -c Release -o out --no-restore
+# Build and publish a framework-dependent release (do not include --self-contained true)
+RUN dotnet publish -c Release -o out --no-restore
 
 # Stage 2: Runtime
-FROM mcr.microsoft.com/dotnet/sdk:6.0-jammy AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-jammy AS runtime
 WORKDIR /app
 
-# Copy built files from the previous stage
+# Copy the published output from the build stage
 COPY --from=test /app/out .
 
-# Set entrypoint
-ENTRYPOINT ["./hello-world"]
+# For a console app, use:
+ENTRYPOINT ["dotnet", "hello-world.dll"]
+
+# For a self-contained executable, if required and you have an image that supports GLIBC 2.36, 
+# you would need to switch to an appropriate base image.
