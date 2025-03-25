@@ -59,7 +59,7 @@
 
 ## Done
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS base
+FROM mcr.microsoft.com/dotnet/sdk:6.0-jammy AS base
 WORKDIR /app
 
 # Copy all files into the container
