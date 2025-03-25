@@ -62,8 +62,9 @@
 FROM ubuntu:23.04 AS base
 WORKDIR /app
 
-# Install prerequisites and Microsoft package signing key
-RUN apt-get update && apt-get install -y wget apt-transport-https ca-certificates gnupg2 && \
+# Update apt with allowance for release info change, then install prerequisites and Microsoft package signing key
+RUN apt-get update -o Acquire::AllowReleaseInfoChange=true && \
+    apt-get install -y wget apt-transport-https ca-certificates gnupg2 && \
     wget https://packages.microsoft.com/config/ubuntu/23.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     rm packages-microsoft-prod.deb
