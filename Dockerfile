@@ -41,20 +41,45 @@
 # ENTRYPOINT ["./hello-world"]
 
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0-ubuntu23.04 AS base
-WORKDIR /app
+# FROM mcr.microsoft.com/dotnet/sdk:6.0-jammy AS base
+# WORKDIR /app
 
-# Copy everything
-COPY . ./
-# Restore as distinct layers
-RUN dotnet restore
+# # Copy everything
+# COPY . ./
+# # Restore as distinct layers
+# RUN dotnet restore
 
-FROM base AS test
-# Expose port (adjust as needed)
-EXPOSE 80
+# FROM base AS test
+# # Expose port (adjust as needed)
+# EXPOSE 80
 
-# Run tests
-CMD dotnet test
+# # Run tests
+# CMD dotnet test
 
 
 ## Done
+
+FROM ubuntu:23.04 AS base
+WORKDIR /app
+
+# Install prerequisites and Microsoft package signing key
+RUN apt-get update && apt-get install -y wget apt-transport-https ca-certificates gnupg2 && \
+    wget https://packages.microsoft.com/config/ubuntu/23.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
+    dpkg -i packages-microsoft-prod.deb && \
+    rm packages-microsoft-prod.deb
+
+# Install the .NET SDK 6.0
+RUN apt-get update && apt-get install -y dotnet-sdk-6.0
+
+# Copy all files into the container
+COPY . ./
+
+# Restore NuGet packages
+RUN dotnet restore
+
+FROM base AS test
+# Expose a port if required (adjust or remove as needed)
+EXPOSE 80
+
+# Run tests when the container starts
+CMD ["dotnet", "test"]
