@@ -41,7 +41,7 @@
 # ENTRYPOINT ["./hello-world"]
 
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0-jammy AS base
+FROM mcr.microsoft.com/dotnet/sdk:8.0-ubuntu23.04 AS test
 WORKDIR /app
 
 # Copy everything
