@@ -59,18 +59,8 @@
 
 ## Done
 
-FROM ubuntu:22.04 AS base
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS base
 WORKDIR /app
-
-# Update apt with allowance for release info change, then install prerequisites and Microsoft package signing key
-RUN apt-get update && \
-    apt-get install -y wget apt-transport-https ca-certificates gnupg2 && \
-    wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
-    dpkg -i packages-microsoft-prod.deb && \
-    rm packages-microsoft-prod.deb
-
-# Install the .NET SDK 6.0
-RUN apt-get update && apt-get install -y dotnet-sdk-6.0
 
 # Copy all files into the container
 COPY . ./
